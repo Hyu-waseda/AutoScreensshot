@@ -3,6 +3,7 @@ import cv2
 import pyautogui as pag
 import time
 import numpy as np
+import datetime
 
 # スクショを取る基準
 screenShot_rate=0.1
@@ -25,7 +26,7 @@ def main():
         #大きな変化があった場合
         if rate > screenShot_rate:
             #画像を保存
-            cv2.imwrite("imgs/"+str(count)+".png",img)
+            cv2.imwrite("imgs/"+str(datetime.datetime.now())+str(count)+".png",img)
             count += 1
 
             #保存した画像をold_imgに代入
