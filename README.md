@@ -21,3 +21,9 @@ pip install -r requirements.txt
 ```
 python3 main.py
 ```
+
+##参考
+
+https://qiita.com/link_under/items/3f00a10649b4a73a94d8
+
+https://github.com/link2004/AutoScreenshot
