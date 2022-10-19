@@ -6,7 +6,7 @@ import numpy as np
 import datetime
 
 # スクショを取る基準
-screenShot_rate=0.1
+screenShot_rate=0.05
 # 何秒おきにスクショをとるか
 sleep_time=3
 
