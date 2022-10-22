@@ -1,4 +1,4 @@
-# AutotScreensshot
+# AutoScreensshot
 
 ## 概要
 
