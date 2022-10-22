@@ -1,10 +1,18 @@
 # AutotScreensshot
 
-- 仮想環境が必要な人
+## 概要
+
+スライドなどの変化を読み取って自動でスクショを撮ってくれます
+
+## 使い方
+
+- 仮想環境の作成（必要な人だけ）
 
 ```
 python3 -m venv .env
 ```
+
+- 仮想環境の立ち上げ（必要な人だけ）
 
 ```
 source .env/bin/activate
@@ -22,7 +30,7 @@ pip install -r requirements.txt
 python3 main.py
 ```
 
-##参考
+## 参考
 
 https://qiita.com/link_under/items/3f00a10649b4a73a94d8
 
