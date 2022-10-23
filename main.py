@@ -9,15 +9,20 @@ import datetime
 screenShot_rate = 0.05
 # 何秒おきにスクショをとるか
 sleep_time = 3
+# 保存枚数をカウント
+count = 0
 
 
 def main():
-    # 最後に保存したフレーム
-    old_img = ScreenShot()
+    # 現在のフレーム
+    img = ScreenShot()
+    SaveScreenShot(img)
 
-    count = 0
+    # 最後に保存したフレーム
+    old_img = img
+
+    # global count
     while True:
-        # 現在のフレーム
         img = ScreenShot()
 
         # 変化量計算
@@ -26,14 +31,10 @@ def main():
 
         # 大きな変化があった場合
         if rate > screenShot_rate:
-            # 画像を保存
-            cv2.imwrite("imgs/"+str(datetime.datetime.now()) +
-                        str(count)+".png", img)
-            count += 1
+            SaveScreenShot(img)
 
             # 保存した画像をold_imgに代入
             old_img = img
-            print("Screenshot!")
 
         time.sleep(sleep_time)
 
@@ -66,6 +67,11 @@ def ScreenShot():
     img = np.array(img)
     img = img[:, :, ::-1].copy()
     return img
+
+
+def SaveScreenShot(img):
+    cv2.imwrite("imgs/" + str(datetime.datetime.now()) + ".png", img)
+    print("Save Screenshot!")
 
 
 if __name__ == "__main__":
