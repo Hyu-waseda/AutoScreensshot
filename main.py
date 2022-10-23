@@ -2,15 +2,12 @@ import numpy as np
 import cv2
 import pyautogui as pag
 import time
-import numpy as np
 import datetime
 
 # スクショを取る基準
 screenShot_rate = 0.05
 # 何秒おきにスクショをとるか
 sleep_time = 3
-# 保存枚数をカウント
-count = 0
 
 
 def main():
@@ -21,7 +18,6 @@ def main():
     # 最後に保存したフレーム
     old_img = img
 
-    # global count
     while True:
         img = ScreenShot()
 
