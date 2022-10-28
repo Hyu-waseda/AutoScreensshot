@@ -66,7 +66,8 @@ def ScreenShot():
 
 
 def SaveScreenShot(img):
-    cv2.imwrite("imgs/" + str(datetime.datetime.now()) + ".png", img)
+    now = datetime.datetime.now()
+    cv2.imwrite("imgs/" + now.strftime('%Y-%m-%d %H.%M.%S') + ".png", img)
     print("Save Screenshot!")
 
 
