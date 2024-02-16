@@ -6,20 +6,19 @@
 
 スライドを配布しない授業動画などで使用する想定です。
 
-お好きに使ってください。
 
 ## 使い方
 
 - 仮想環境の作成（必要な人だけ）
 
 ```
-python3 -m venv .env
+python3 -m venv .venv
 ```
 
 - 仮想環境の立ち上げ（必要な人だけ）
 
 ```
-source .env/bin/activate
+source .venv/bin/activate
 ```
 
 - 必要なモジュールのインストール

@@ -1,75 +1,73 @@
+import os
 import numpy as np
 import cv2
 import pyautogui as pag
 import time
 import datetime
 
-# スクショを取る基準
-screenShot_rate = 0.05
-# 何秒おきにスクショをとるか
-sleep_time = 3
-
+# 画像変化のしきい値（大きな変化があったとみなす割合）
+change_threshold = 0.05
+# スクリーンショットを取る間隔（秒）
+screenshot_interval = 6
 
 def main():
-    # 現在のフレーム
-    img = ScreenShot()
-    SaveScreenShot(img)
+    # 初期フレームをキャプチャ
+    current_image = capture_screenshot()
+    save_screenshot(current_image)
 
-    # 最後に保存したフレーム
-    old_img = img
+    # 最後に保存したフレームを保持
+    last_saved_image = current_image
 
     while True:
-        img = ScreenShot()
+        current_image = capture_screenshot()
 
-        # 変化量計算
-        rate = ImageChangeRate(old_img, img)
-        print(rate)
+        # 画像の変化量を計算
+        change_rate = calculate_change_rate(last_saved_image, current_image)
+        print(change_rate)
 
-        # 大きな変化があった場合
-        if rate > screenShot_rate:
-            SaveScreenShot(img)
+        # しきい値以上の変化があった場合、スクリーンショットを保存
+        if change_rate > change_threshold:
+            save_screenshot(current_image)
+            last_saved_image = current_image
 
-            # 保存した画像をold_imgに代入
-            old_img = img
+        time.sleep(screenshot_interval)
 
-        time.sleep(sleep_time)
-
-
-def ImageChangeRate(img1, img2, isShow=False):
+def calculate_change_rate(image1, image2):
     # 画像をグレースケールに変換
-    img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-    img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+    gray_image1 = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
+    gray_image2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
 
-    # 2枚の画像の差分を求める
-    mdframe = cv2.absdiff(img1, img2, 0.5)
-    # 白と黒の2色の画像にする
-    thresh = cv2.threshold(mdframe, 10, 255, cv2.THRESH_BINARY)[1]
+    # 画像の差分を計算
+    diff_image = cv2.absdiff(gray_image1, gray_image2)
+    # 差分画像を二値化
+    _, threshold_image = cv2.threshold(diff_image, 10, 255, cv2.THRESH_BINARY)
 
-    # 画像サイズ
-    image_size = thresh.size
-    # 白のピクセル数／画像サイズ
-    whitePixels = cv2.countNonZero(thresh)
-    whiteAreaRatio = (whitePixels/image_size)
+    # 白のピクセル数と全体のピクセル数から変化量を算出
+    white_pixels = cv2.countNonZero(threshold_image)
+    total_pixels = threshold_image.size
+    change_ratio = white_pixels / total_pixels
 
-    # 変化量を1.0~0.0で出力
-    return whiteAreaRatio
+    return change_ratio
 
-
-def ScreenShot():
-    # スクリーンショット
-    img = pag.screenshot()
-    img = img.convert('RGB')
-    # pyautoguiの画像をopencvの画像形式に変換
-    img = np.array(img)
-    img = img[:, :, ::-1].copy()
-    return img
+def capture_screenshot():
+    # スクリーンショットを取得してOpenCV形式に変換
+    screenshot = pag.screenshot()
+    screenshot = np.array(screenshot.convert('RGB'))[:, :, ::-1]
+    return screenshot
 
 
-def SaveScreenShot(img):
-    now = datetime.datetime.now()
-    cv2.imwrite("imgs/" + now.strftime('%Y-%m-%d %H.%M.%S') + ".png", img)
-    print("Save Screenshot!")
-
+def save_screenshot(image):
+    # スクリーンショットを保存するフォルダのパス
+    folder_path = "imgs"
+    
+    # フォルダが存在しない場合は作成
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    
+    # 現在の日時をファイル名に使用してスクリーンショットを保存
+    timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H.%M.%S')
+    cv2.imwrite(f"{folder_path}/{timestamp}.png", image)
+    print("Screenshot saved!")
 
 if __name__ == "__main__":
     main()
